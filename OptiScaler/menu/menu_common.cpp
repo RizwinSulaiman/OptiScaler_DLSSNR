@@ -2578,6 +2578,42 @@ void MenuCommon::RenderActiveUpscalerSettings(RenderMenuContext& ctx)
                 if (bool dbg = state.xessDebug; ImGui::Checkbox("Dump (Shift+Del)", &dbg))
                     state.xessDebug = dbg;
 
+                // AMD NR bridge: keep the FidelityFX/NR stage below display resolution, then
+                // let Output Scaling restore the final native presentation resolution.
+                auto applyAmdNrBridgePreset = [&](float ratio)
+                {
+                    _ssEnabled = true;
+                    _ssRatio = ratio;
+                    _ssDownsampler = Scaler::FSR1;
+                    config->OutputScalingEnabled = true;
+                    config->OutputScalingMultiplier = ratio;
+                    config->OutputScalingDownscaler = Scaler::FSR1;
+
+                    // Avoid running OptiScaler's NVIDIA NR path alongside an external AMD runtime.
+                    config->DlssNrEnabled = false;
+
+                    const bool usesDlssd = currentFeature->GetUpscalerType() == Upscaler::DLSSD;
+                    state.newBackend = usesDlssd ? Upscaler::DLSSD : currentBackend;
+                    MARK_ALL_BACKENDS_CHANGED();
+                };
+
+                ImGui::TextUnformatted("AMD NR bridge:");
+                ImGui::SameLine();
+                if (ImGui::SmallButton("83%##amd_nr")) applyAmdNrBridgePreset(0.83f);
+                ImGui::SameLine();
+                if (ImGui::SmallButton("75%##amd_nr")) applyAmdNrBridgePreset(0.75f);
+                ImGui::SameLine();
+                if (ImGui::SmallButton("67%##amd_nr")) applyAmdNrBridgePreset(0.67f);
+                ImGui::SameLine();
+                if (ImGui::SmallButton("58%##amd_nr")) applyAmdNrBridgePreset(0.58f);
+                ImGui::SameLine();
+                if (ImGui::SmallButton("50%##amd_nr")) applyAmdNrBridgePreset(0.50f);
+                ImGui::SameLine();
+                ShowHelpMarker("Experimental external AMD-NR profile. Use an FSR 3/4 backend.\n"
+                               "The FSR/NR stage runs below display resolution and Output Scaling\n"
+                               "uses FSR1 to present at native resolution. Lower values trade image\n"
+                               "quality for a much smaller neural workload. Internal DLSS-NR is disabled.");
+
                 ImGui::SameLine(0.0f, 6.0f);
                 int dbgCount = state.xessDebugFrames;
 
