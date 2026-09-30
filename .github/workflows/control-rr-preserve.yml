@@ -22,14 +22,7 @@ jobs:
         run: |
           python experiments/control_rr_preserve/apply_integration.py
           git diff --check
-          git diff -- \
-            OptiScaler/Config.h \
-            OptiScaler/Config.cpp \
-            OptiScaler/shaders/dlssnr/DlssNr_Dx12.cpp \
-            OptiScaler.ini \
-            OptiScaler/hooks/Streamline_Hooks.cpp \
-            OptiScaler/misc/Quirks.h \
-            OptiScaler/dllmain.cpp
+          git diff -- OptiScaler/Config.h OptiScaler/Config.cpp OptiScaler/shaders/dlssnr/DlssNr_Dx12.cpp OptiScaler.ini OptiScaler/hooks/Streamline_Hooks.cpp OptiScaler/misc/Quirks.h OptiScaler/dllmain.cpp
 
       - name: Verify FSR4, FSR SDK and CONTROL pins
         shell: pwsh
@@ -70,14 +63,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add \
-            OptiScaler/Config.h \
-            OptiScaler/Config.cpp \
-            OptiScaler/shaders/dlssnr/DlssNr_Dx12.cpp \
-            OptiScaler.ini \
-            OptiScaler/hooks/Streamline_Hooks.cpp \
-            OptiScaler/misc/Quirks.h \
-            OptiScaler/dllmain.cpp
+          git add OptiScaler/Config.h OptiScaler/Config.cpp OptiScaler/shaders/dlssnr/DlssNr_Dx12.cpp OptiScaler.ini OptiScaler/hooks/Streamline_Hooks.cpp OptiScaler/misc/Quirks.h OptiScaler/dllmain.cpp
           if (git diff --cached --quiet) {
             Write-Host "Integration already materialized."
           } else {
