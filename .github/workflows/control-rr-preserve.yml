@@ -74,8 +74,11 @@ jobs:
           if-no-files-found: error
           retention-days: 7
           path: |
-            x64/Release/OptiScaler.dll
+            x64/Release/a/OptiScaler.dll
             x64/Release/a/nvngx.dll_dlssnr.dll
+            x64/Release/a/OptiScaler/amd_fidelityfx_loader_dx12.dll
+            x64/Release/a/OptiScaler/amd_fidelityfx_upscaler_dx12.dll
+            x64/Release/a/OptiScaler/amd_fidelityfx_framegeneration_dx12.dll
 
       - name: Materialize validated integration patch
         if: github.ref == 'refs/heads/exp/control-rr-preserve'
