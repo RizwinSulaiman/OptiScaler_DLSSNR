@@ -1,0 +1,97 @@
+{
+  "snapshot_utc": "2026-09-30T05:10:38Z",
+  "policy": {
+    "quality_first": true,
+    "bit_exact_optimizations_default": true,
+    "lossy_optimizations_default": false,
+    "pc_or_steamdeck_build_required": false
+  },
+  "fidelityfx_sdk_v2": {
+    "repository": "GPUOpen-LibrariesAndSDKs/FidelityFX-SDK",
+    "commit": "60f4ea81909200d8542eca14dccb2628b763a9a3",
+    "sdk_version": "2.3.0",
+    "fsr_upscaling": "4.1.1",
+    "fsr_frame_generation": "4.0.1",
+    "fsr_ray_regeneration": "1.2.0",
+    "notes": [
+      "This commit is already the external/FidelityFX-SDK-v2 gitlink on the experiment branch.",
+      "RR 1.2 uses view/projection matrices and signed linear depth/depth-delta semantics; CONTROL diagnostics must validate those contracts before RR quality conclusions."
+    ]
+  },
+  "optiscaler": {
+    "repository": "optiscaler/OptiScaler",
+    "commit": "45a2001303ddff632e279f77aef85ceede5832cb",
+    "control_commits": [
+      "20d9d147a4334a49a99d67d235ad7915e0d6d846",
+      "1117abdb7fabb62828010d3a6e5ebb8bec7f90be",
+      "0696cf971a3761dc3f22f2ddb0fc61acff7fd96a"
+    ],
+    "control_quirks": [
+      "DisableDxgiSpoofing",
+      "DoNotPreserveFGSwapChain",
+      "DisableOTA"
+    ],
+    "fsr4_files_match_upstream": {
+      "OptiScaler/fsr4/FSR4ModelSelection.cpp": "0f962b3c85d93dc15123d49716fefbb5e915c5b6",
+      "OptiScaler/fsr4/FSR4ModelSelection.h": "262c3cd8483244278760a4394d7602554c9a3b31",
+      "OptiScaler/fsr4/FSR4Upgrade.cpp": "294fe82fe8d4bad10f4d070c66acec5b58f5c138",
+      "OptiScaler/fsr4/FSR4Upgrade.h": "e01c49f1fb0e305abf6f9fd34f530b196ae90954"
+    }
+  },
+  "amdnr": {
+    "repository": "3zwr1/AMD-NR---OptiScaler",
+    "core_release": "0.3.4.2",
+    "latest_repo_commit_seen": "8547778c70dab333e456494d78c363f02f9e63c0",
+    "daniel_runtime_supported": "0.5.0",
+    "future_core_0_3_5_public": false
+  },
+  "daniel_runtime": {
+    "repository": "danielblnc/DLSS-NR-on-AMD",
+    "public_release": "0.5.0",
+    "published_utc": "2026-09-29T14:22:46Z",
+    "rdna4_claim": "5% faster than 0.4.3 plus richer/higher-detail output"
+  },
+  "lmxxf_rdna4": {
+    "repository": "lmxxf/dlss5-on-amd-9070xt-porting",
+    "public_release_baseline": "0.37",
+    "source_commit": "63a84002ad1318422cdadf6cf91d13b4bce29723",
+    "accepted_through": "2026-09-30T05:10:38Z",
+    "accepted_bit_exact_commits": [
+      "3767f49a70fe57e6805673d5f2a62c72ffa723ea",
+      "56a76a42043eded3e1f79636e3a9fa782c153d24",
+      "1de2182f266d17f15bc66b7bcc0fb50b567f2a3e",
+      "82119ab040a2c72af3c9283e322d69804b2ababb",
+      "7ca25c9897223fafd6451e80c7fbf020abb4dc9a",
+      "a381e50c43ed0596189ed7086741d67fc5a18361",
+      "1d3a6bfc651fcbf22acb1e91f53b4b1e9c7e6d5d",
+      "ddb06755ab5553273d9a488a1d60f01971434110",
+      "12a632a8730aed03c0df4baecbfef27b7f83965f",
+      "024aa9d6cdc66b0672d3b3182491b633a9932a09",
+      "f9115ce5f697bcb0f61db31f1c96c108e7df0e55",
+      "8bc7cfef3c88e70d161b1fd390c892d91a6d2379",
+      "63a84002ad1318422cdadf6cf91d13b4bce29723"
+    ],
+    "do_not_enable_by_default": [
+      {
+        "commit": "97eb22c265794ae831bad43f18aa0deea6bf6078",
+        "reason": "1920x1088 compact 1080 tier is intentionally lossy despite about 4.4% model-time saving"
+      },
+      {
+        "commit": "ec6c01993a770383b3c1b972913b1f67d6d8efa1",
+        "reason": "draw-slice handoff polling tested slower than fence"
+      },
+      {
+        "commit": "5b8d5dac9c7ba756b678c3b644bb30b9581bb822",
+        "reason": "D3D-to-HIP GPU polling tested slower on full-frame replay"
+      },
+      {
+        "commit": "6cf01afb41e2dd52c7b2936b06b9efae1da766d5",
+        "reason": "Infinity Cache/hot-reuse experiment was null/slightly slower"
+      },
+      {
+        "commit": "2fbb305aa7be4b7bfb45a4789286cf8e94e449eb",
+        "reason": "four-wave LDS C512 weight sharing was slower"
+      }
+    ]
+  }
+}
