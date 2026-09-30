@@ -30,20 +30,30 @@ jobs:
         shell: pwsh
         run: python experiments/control_rr_preserve/verify_upstream_pins.py
 
-      - name: Verify pinned lmxxf RDNA4 source snapshot
+      - name: Verify tracked neural upstream snapshots
         shell: pwsh
         run: |
           $pins = Get-Content experiments/control_rr_preserve/upstream_pins.json | ConvertFrom-Json
-          $dir = Join-Path $env:RUNNER_TEMP "lmxxf-rdna4"
-          git init $dir
-          git -C $dir remote add origin https://github.com/lmxxf/dlss5-on-amd-9070xt-porting.git
-          git -C $dir fetch --depth=1 origin $pins.lmxxf_rdna4.source_commit
-          $actual = (git -C $dir rev-parse FETCH_HEAD).Trim()
-          if ($actual -ne $pins.lmxxf_rdna4.source_commit) {
-            throw "lmxxf pin mismatch: $actual"
+
+          function Assert-GitCommit([string]$Name, [string]$Repo, [string]$Commit) {
+            $safe = ($Name -replace '[^A-Za-z0-9_.-]', '_')
+            $dir = Join-Path $env:RUNNER_TEMP $safe
+            git init $dir | Out-Null
+            git -C $dir remote add origin ("https://github.com/" + $Repo + ".git")
+            git -C $dir fetch --depth=1 origin $Commit
+            if ($LASTEXITCODE -ne 0) { throw "$Name fetch failed" }
+            $actual = (git -C $dir rev-parse FETCH_HEAD).Trim()
+            if ($actual -ne $Commit) { throw "$Name pin mismatch: expected $Commit got $actual" }
+            Write-Host "$Name verified: $actual"
           }
-          Write-Host "lmxxf production optimization snapshot verified: $actual"
-          Write-Host "Lossy 1088-row mode remains opt-in only; rejected/null sync, cache and tail experiments remain disabled."
+
+          Assert-GitCommit "lmxxf-stable-0.38" $pins.lmxxf_rdna4.repository $pins.lmxxf_rdna4.stable_release_commit
+          Assert-GitCommit "lmxxf-accepted-post-0.38" $pins.lmxxf_rdna4.repository $pins.lmxxf_rdna4.source_commit
+          Assert-GitCommit "mochizuki-0.0.2.5" $pins.mochizuki_dlssnr_amd.repository $pins.mochizuki_dlssnr_amd.source_commit
+          Assert-GitCommit "theautomatic-1.9.8.1" $pins.theautomatic.repository $pins.theautomatic.source_commit
+          Assert-GitCommit "amdnr-latest-seen" $pins.amdnr.repository $pins.amdnr.latest_repo_commit_seen
+
+          Write-Host "Quality gate: lossy 1088-row and adaptive reuse remain off; open lmxxf PR #12 is tracked but not adopted."
 
       - name: Build and run RR-preserve reference tests
         shell: pwsh
