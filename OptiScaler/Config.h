@@ -257,6 +257,9 @@ class Config
     // DLSS Neural Rendering: a detail-synthesis pass over the upscaler's output. Off by default -- it is
     // an undocumented feature driven directly through its snippet, not something NVIDIA exposes.
     CustomOptional<bool> DlssNrEnabled { false };
+    // CONTROL/RR-preserve experiment. Phase 1 is diagnostics only; no rendering behavior changes.
+    CustomOptional<bool> DlssNrControlDiagnostics { false };
+    CustomOptional<bool> DlssNrControlRrPreserveExperimental { false };
     // Toggles the pass in game. Unbound by default -- a key that does something unexpected is worse
     // than one that does nothing.
     CustomOptional<int> DlssNrToggleKey { UnboundKey };
@@ -727,6 +730,7 @@ class Config
 
     // NVAPI Override
     CustomOptional<bool> DisableFlipMetering { false };
+    CustomOptional<bool> DisableOTA { false };
 
     // Spoofing
     CustomOptional<bool, SoftDefault> DxgiSpoofing { true };

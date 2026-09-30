@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 
 #include <set>
 
@@ -1635,6 +1635,39 @@ void DlssNr_Dx12::Dispatch(ID3D12GraphicsCommandList* cmdList, ID3D12Resource* c
         LOG_INFO("DLSS-NR guides: depth {}, motion vector scale {} x {}, guides {}x{} for a {}x{} frame",
                  g_nr.guideDepthInverted ? "inverted" : "not inverted", g_nr.guideMvScaleX,
                  g_nr.guideMvScaleY, guideWidth, guideHeight, width, height);
+    }
+
+    if (cfg.DlssNrControlDiagnostics.value_or_default())
+    {
+        const D3D12_RESOURCE_DESC depthDiag = depth->GetDesc();
+        const D3D12_RESOURCE_DESC motionDiag = motion->GetDesc();
+        struct ControlDiagState
+        {
+            unsigned int outW = 0, outH = 0, subW = 0, subH = 0;
+            unsigned int depthW = 0, depthH = 0, motionW = 0, motionH = 0;
+            unsigned int guideW = 0, guideH = 0;
+            float mvX = 0.0f, mvY = 0.0f;
+            bool inverted = false, valid = false;
+        };
+        static ControlDiagState last {};
+        ControlDiagState now {
+            width, (unsigned int) height, frame.RenderSubrectWidth, frame.RenderSubrectHeight,
+            (unsigned int) depthDiag.Width, depthDiag.Height,
+            (unsigned int) motionDiag.Width, motionDiag.Height,
+            guideWidth, guideHeight, frame.MvScaleX, frame.MvScaleY, frame.DepthInverted, true
+        };
+        if (!last.valid || std::memcmp(&last, &now, sizeof(ControlDiagState)) != 0)
+        {
+            last = now;
+            LOG_INFO("CONTROL NR diag: output {}x{}, render subrect {}x{}, depth {}x{}, motion {}x{}, "
+                     "active guides {}x{}, MV scale {}x{}, depth {}, reset {}",
+                     now.outW, now.outH, now.subW, now.subH, now.depthW, now.depthH,
+                     now.motionW, now.motionH, now.guideW, now.guideH, now.mvX, now.mvY,
+                     now.inverted ? "inverted" : "normal", frame.Reset);
+        }
+
+        if (cfg.DlssNrControlRrPreserveExperimental.value_or_default())
+            LOG_DEBUG("CONTROL RR-preserve gate enabled; phase-1 build remains diagnostics-only");
     }
 
     if (cfg.DlssNrProxyProbe.value_or_default())

@@ -1,4 +1,4 @@
-#include <pch.h>
+﻿#include <pch.h>
 
 #include "Streamline_Hooks.h"
 
@@ -255,12 +255,12 @@ sl::Result StreamlineHooks::hkslInit(const sl::Preferences& pref, uint64_t sdkVe
     // if (hookSetTag)
     //     localPref->flags &= ~(sl::PreferenceFlags::eAllowOTA | sl::PreferenceFlags::eLoadDownloadedPlugins);
 
-    // To prevent mixed up OTA situations
-    // if (State::Instance().activeFgOutput == FGOutput::DLSSG)
-    //{
-    //    localPref.flags &= ~sl::PreferenceFlags::eAllowOTA;
-    //    localPref.flags &= ~sl::PreferenceFlags::eLoadDownloadedPlugins;
-    //}
+    // To prevent mixed up OTA situations. CONTROL Resonant enables this via its game quirk.
+    if (Config::Instance()->DisableOTA.value_or_default())
+    {
+        localPref.flags &= ~sl::PreferenceFlags::eAllowOTA;
+        localPref.flags &= ~sl::PreferenceFlags::eLoadDownloadedPlugins;
+    }
 
     return o_slInit(localPref, sdkVersion);
 }

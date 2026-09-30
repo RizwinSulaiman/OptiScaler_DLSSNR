@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "SysUtils.h"
 
@@ -41,6 +41,7 @@ enum class GameQuirk : uint64_t
     DoNotLoadAmdxc64,
     DontUseUnrealMVBarriers,
     DontUseUnrealColorBarriers,
+    DisableOTA,
 
     // Quirks that are applied deeper in code
     CyberpunkHudlessState,
@@ -457,6 +458,11 @@ static const QuirkEntry quirkTable[] = {
     QUIRK_ENTRY("needforspeedunbound.exe", GameQuirk::DisableDxgiSpoofing),
     QUIRK_ENTRY("nioh2.exe", GameQuirk::DisableDxgiSpoofing, GameQuirk::ForceAutoExposure),
     QUIRK_ENTRY("control_dx12.exe", GameQuirk::DisableDxgiSpoofing, GameQuirk::ForceAutoExposure),
+
+    // CONTROL Resonant: Streamline spoofing is sufficient; preserving the FG swapchain and OTA plugins are unstable.
+    QUIRK_ENTRY("controlresonant.exe", GameQuirk::DisableDxgiSpoofing, GameQuirk::DoNotPreserveFGSwapChain,
+                GameQuirk::DisableOTA),
+
     QUIRK_ENTRY("deathloop.exe", GameQuirk::DisableDxgiSpoofing),
     QUIRK_ENTRY("ff7remake_.exe", GameQuirk::DisableDxgiSpoofing), // Luma mod required for upscalers
     QUIRK_ENTRY("farmingsimulator2025game.exe", GameQuirk::DisableDxgiSpoofing),
