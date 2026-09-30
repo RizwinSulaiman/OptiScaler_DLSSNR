@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   reference-and-build:
@@ -37,3 +37,17 @@ jobs:
       - name: Build patched OptiScaler Release
         shell: cmd
         run: msbuild /m /p:Configuration=Release . /verbosity:minimal
+
+      - name: Materialize validated integration patch
+        if: github.ref == 'refs/heads/exp/control-rr-preserve'
+        shell: pwsh
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add OptiScaler/Config.h OptiScaler/Config.cpp OptiScaler/shaders/dlssnr/DlssNr_Dx12.cpp
+          if (git diff --cached --quiet) {
+            Write-Host "Integration already materialized."
+          } else {
+            git commit -m "exp: materialize CONTROL diagnostics integration"
+            git push origin HEAD:exp/control-rr-preserve
+          }
