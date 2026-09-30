@@ -1,5 +1,5 @@
 {
-  "snapshot_utc": "2026-09-30T05:41:34Z",
+  "snapshot_utc": "2026-09-30T06:07:19Z",
   "policy": {
     "quality_first": true,
     "bit_exact_optimizations_default": true,
@@ -55,10 +55,10 @@
     "repository": "lmxxf/dlss5-on-amd-9070xt-porting",
     "public_release_baseline": "0.37",
     "source_commit": "63a84002ad1318422cdadf6cf91d13b4bce29723",
-    "latest_repo_commit_seen": "4e3d5d633ee3c775627ea85b170d68d47bc37319",
+    "latest_repo_commit_seen": "7b821c7f319b7ce5ef0f797258019e9bd69dba0b",
     "accepted_through": "2026-09-30T05:10:38Z",
-    "latest_seen_utc": "2026-09-30T05:41:34Z",
-    "pin_reason": "63a84002 is the latest production optimization commit in the inspected window. The newer 4e3d5d63 commit records experiments that were bit-exact but not faster and leaves their macros disabled by default, so the quality-first production pin stays at 63a84002.",
+    "latest_seen_utc": "2026-09-30T06:07:19Z",
+    "pin_reason": "63a84002 remains the latest inspected production optimization commit with a measured win. Newer 4e3d5d63 and 7b821c7f commits record bit-exact candidates that were not faster or had mixed ABBA results, and leave their macros disabled by default, so the quality-first production pin stays at 63a84002.",
     "accepted_bit_exact_commits": [
       "3767f49a70fe57e6805673d5f2a62c72ffa723ea",
       "56a76a42043eded3e1f79636e3a9fa782c153d24",
@@ -75,6 +75,10 @@
       "63a84002ad1318422cdadf6cf91d13b4bce29723"
     ],
     "do_not_enable_by_default": [
+      {
+        "commit": "7b821c7f319b7ce5ef0f797258019e9bd69dba0b",
+        "reason": "C512 QKV-attention V-transpose candidate was bit-exact but had mixed 900-tier ABBA results; macro remains default 0"
+      },
       {
         "commit": "4e3d5d633ee3c775627ea85b170d68d47bc37319",
         "reason": "ViT expand-tail and C256 line-store/pad-zero experiments were bit-exact but not faster at 900 tier; macros remain default 0"
