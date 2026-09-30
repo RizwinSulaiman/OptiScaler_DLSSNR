@@ -22,6 +22,7 @@ jobs:
         shell: pwsh
         run: |
           python experiments/control_rr_preserve/apply_integration.py
+          python experiments/control_rr_preserve/normalize_materialized_utf8.py
           git diff --check
           git diff -- OptiScaler/Config.h OptiScaler/Config.cpp OptiScaler/shaders/dlssnr/DlssNr_Dx12.cpp OptiScaler.ini OptiScaler/hooks/Streamline_Hooks.cpp OptiScaler/misc/Quirks.h OptiScaler/dllmain.cpp
 
@@ -41,8 +42,8 @@ jobs:
           if ($actual -ne $pins.lmxxf_rdna4.source_commit) {
             throw "lmxxf pin mismatch: $actual"
           }
-          Write-Host "lmxxf snapshot verified: $actual"
-          Write-Host "Lossy 1088-row mode remains opt-in only; rejected sync/cache experiments remain disabled."
+          Write-Host "lmxxf production optimization snapshot verified: $actual"
+          Write-Host "Lossy 1088-row mode remains opt-in only; rejected/null sync, cache and tail experiments remain disabled."
 
       - name: Build and run RR-preserve reference tests
         shell: pwsh
