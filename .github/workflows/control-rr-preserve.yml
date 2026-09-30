@@ -67,6 +67,16 @@ jobs:
           msbuild OptiScaler.sln /m /p:Configuration=Release /p:Platform=x64 /verbosity:minimal
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+      - name: Upload validated CONTROL build
+        uses: actions/upload-artifact@v4
+        with:
+          name: control-rr-preserve-x64
+          if-no-files-found: error
+          retention-days: 7
+          path: |
+            x64/Release/OptiScaler.dll
+            x64/Release/a/nvngx.dll_dlssnr.dll
+
       - name: Materialize validated integration patch
         if: github.ref == 'refs/heads/exp/control-rr-preserve'
         shell: pwsh
