@@ -17,6 +17,13 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Apply default-off CONTROL integration patch
+        shell: pwsh
+        run: |
+          python experiments/control_rr_preserve/apply_integration.py
+          git diff --check
+          git diff -- OptiScaler/Config.h OptiScaler/Config.cpp OptiScaler/shaders/dlssnr/DlssNr_Dx12.cpp
+
       - name: Build and run RR-preserve reference tests
         shell: cmd
         run: |
@@ -27,6 +34,6 @@ jobs:
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v2
 
-      - name: Build OptiScaler Release
+      - name: Build patched OptiScaler Release
         shell: cmd
         run: msbuild /m /p:Configuration=Release . /verbosity:minimal
