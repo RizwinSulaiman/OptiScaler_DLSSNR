@@ -17,12 +17,38 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Apply default-off CONTROL integration patch
+      - name: Apply CONTROL integration and upstream safety patch
         shell: pwsh
         run: |
           python experiments/control_rr_preserve/apply_integration.py
           git diff --check
-          git diff -- OptiScaler/Config.h OptiScaler/Config.cpp OptiScaler/shaders/dlssnr/DlssNr_Dx12.cpp
+          git diff -- \
+            OptiScaler/Config.h \
+            OptiScaler/Config.cpp \
+            OptiScaler/shaders/dlssnr/DlssNr_Dx12.cpp \
+            OptiScaler.ini \
+            OptiScaler/hooks/Streamline_Hooks.cpp \
+            OptiScaler/misc/Quirks.h \
+            OptiScaler/dllmain.cpp
+
+      - name: Verify FSR4, FSR SDK and CONTROL pins
+        shell: pwsh
+        run: python experiments/control_rr_preserve/verify_upstream_pins.py
+
+      - name: Verify pinned lmxxf RDNA4 source snapshot
+        shell: pwsh
+        run: |
+          $pins = Get-Content experiments/control_rr_preserve/upstream_pins.json | ConvertFrom-Json
+          $dir = Join-Path $env:RUNNER_TEMP "lmxxf-rdna4"
+          git init $dir
+          git -C $dir remote add origin https://github.com/lmxxf/dlss5-on-amd-9070xt-porting.git
+          git -C $dir fetch --depth=1 origin $pins.lmxxf_rdna4.source_commit
+          $actual = (git -C $dir rev-parse FETCH_HEAD).Trim()
+          if ($actual -ne $pins.lmxxf_rdna4.source_commit) {
+            throw "lmxxf pin mismatch: $actual"
+          }
+          Write-Host "lmxxf snapshot verified: $actual"
+          Write-Host "Lossy 1088-row mode remains opt-in only; rejected sync/cache experiments remain disabled."
 
       - name: Build and run RR-preserve reference tests
         shell: cmd
@@ -44,10 +70,17 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add OptiScaler/Config.h OptiScaler/Config.cpp OptiScaler/shaders/dlssnr/DlssNr_Dx12.cpp
+          git add \
+            OptiScaler/Config.h \
+            OptiScaler/Config.cpp \
+            OptiScaler/shaders/dlssnr/DlssNr_Dx12.cpp \
+            OptiScaler.ini \
+            OptiScaler/hooks/Streamline_Hooks.cpp \
+            OptiScaler/misc/Quirks.h \
+            OptiScaler/dllmain.cpp
           if (git diff --cached --quiet) {
             Write-Host "Integration already materialized."
           } else {
-            git commit -m "exp: materialize CONTROL diagnostics integration"
+            git commit -m "exp: materialize CONTROL FSR4 and stability sync"
             git push origin HEAD:exp/control-rr-preserve
           }
