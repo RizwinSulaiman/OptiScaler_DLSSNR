@@ -1,5 +1,5 @@
 {
-  "snapshot_utc": "2026-10-01T08:10:52Z",
+  "snapshot_utc": "2026-10-01T17:52:44Z",
   "policy": {
     "quality_first": true,
     "bit_exact_optimizations_default": true,
@@ -23,9 +23,9 @@
   },
   "optiscaler": {
     "repository": "optiscaler/OptiScaler",
-    "commit": "45a2001303ddff632e279f77aef85ceede5832cb",
+    "commit": "435609d4080373a008cc0312fb65641d35feae9c",
     "nightly": "nightly-20260930",
-    "nightly_note": "September 30 nightly only exposes more existing options in the overlay; it does not supersede AMDNR's host or add a newer FSR/RR implementation.",
+    "nightly_note": "Latest scanned master adds DLSS DX11/Vulkan through DX12 interop; CONTROL remains native D3D12, so track this as an integration reference rather than a reason to replace the host.",
     "control_commits": [
       "20d9d147a4334a49a99d67d235ad7915e0d6d846",
       "1117abdb7fabb62828010d3a6e5ebb8bec7f90be",
@@ -49,7 +49,7 @@
     "core_release_tag": "Alpha0.3.5",
     "core_release_commit": "b6360abf3a727be6a9c4db65df293d8ae06b9bae",
     "release_published_utc": "2026-10-01T03:05:49Z",
-    "latest_repo_commit_seen": "d7d661827df2699d56a126dc50b139b72f6a9c65",
+    "latest_repo_commit_seen": "a4bb31f933d78d6c76b2ec0b2ded20ff587916b6",
     "launcher_version": "0.3.5",
     "bundled_lmxxf": "0.37",
     "daniel_runtime_supported": "0.5.1",
@@ -68,16 +68,16 @@
   },
   "lmxxf_rdna4": {
     "repository": "lmxxf/dlss5-on-amd-9070xt-porting",
-    "stable_release": "0.38",
-    "stable_release_commit": "e1b1a18c71d063431788ea0ec8dcf1ccb7c2de08",
+    "stable_release": "0.39",
+    "stable_release_commit": "55966ef2a0444d88adedaee8df9033e40d3ed467",
     "source_commit": "0edf4bd86e55598e986ef533ba78a22120779bb6",
-    "latest_repo_commit_seen": "beea366971f9f0d45db8cbc653722095de2458ae",
+    "latest_repo_commit_seen": "ca54996e6f8e0e799258f6bca8e99eb25f2c1596",
     "accepted_through": "2026-10-01T08:10:14Z",
-    "latest_seen_utc": "2026-10-01T08:10:52Z",
-    "pin_reason": "0.38 remains the reproducible stable package baseline. 0edf4bd is the latest inspected quality-safe production state: it installs the rebuilt df92ed49 exact build, records 62 modules plus add-on/runtime assets, and reports RE9 replay SAME with smoke 0. Intervening accepted work includes W2 Up/QKV/FFN organization cuts and FP8 weight WMMA where the original data is already on the E4M3 lattice. Lossy fast-tier experiments were explicitly shelved and remain excluded from the CONTROL baseline. The later 9383b7c/e42057e2/beea366 commits only fix WorkingPlan path text, so latest-seen is tracked separately from the accepted production pin.",
+    "latest_seen_utc": "2026-10-01T17:52:44Z",
+    "pin_reason": "0.39 is now the newest tagged package baseline. The CONTROL quality-safe production source pin stays at 0edf4bd: it is the validated exact install state with RE9 replay SAME and smoke 0. Later 0.39 packaging/runtime notes do not invalidate it; 82ce821f adds faster per-module scheduler recipe options but they are default-off, and ca54996e records follow-up candidates that failed ABBA/p99, so none are promoted into the CONTROL default.",
     "stable_effect": {
-      "900_tier_ms": "about 8.0 -> 7.6 at the 0.38 baseline, with additional exact post-0.38 cuts accepted afterward",
-      "1080_tier_ms": "about 10.8 -> 10.4 at the 0.38 baseline, with additional exact post-0.38 cuts accepted afterward",
+      "900_tier_ms": "about 8.0 -> 7.6 at the prior 0.38 measured baseline; 0.39 is the current tag and the exact source pin remains separately validated",
+      "1080_tier_ms": "about 10.8 -> 10.4 at the prior 0.38 measured baseline; 0.39 is the current tag and the exact source pin remains separately validated",
       "default_output": "quality-first exact path; no lossy fast tier enabled",
       "lossy_1088_rows": "off by default"
     },
@@ -133,10 +133,10 @@
   },
   "mochizuki_dlssnr_amd": {
     "repository": "mochizuki0323/DLSSNR-AMD",
-    "release": "v0.0.2.5",
-    "source_commit": "d1185d25141b1714d7837151b6fa782e6427568b",
+    "release": "v0.0.3",
+    "source_commit": "82560c4fbfaac347fc5e22c22025191402ae916b",
     "port_status": "reference_locked_for_control_port",
-    "windows_status_at_commit": "same changes are present under windows/ but were not yet game-tested",
+    "windows_status_at_commit": "v0.0.3 ships an experimental Windows preview; RX 9070 XT offline network timings are published, but broad game validation is still limited. The CONTROL-relevant MV/subrect/history semantics remain inherited from v0.0.2.5.",
     "control_relevant_changes": [
       "Normalise DLSSNR.MVecScale by the motion texture's own active region rather than colour size.",
       "Use full-resolution game motion vectors in place where the resource supports it instead of a quarter-resolution copy.",
@@ -148,13 +148,14 @@
   },
   "theautomatic": {
     "repository": "TheAutomatic/dlss-5-amd-project",
-    "release": "v1.9.8.1",
-    "source_commit": "9afa534001637ba4852062514c3c7c4124735c1e",
+    "release": "v1.9.9.1",
+    "source_commit": "f7edf1eb6799f523ee0caeb401b83a49e21eed8b",
     "lmxxf_baseline": "0.37",
     "daniel_0_5_1_layout_supported": true,
+    "daniel_0_6_0_layout_supported": true,
     "use": "full-source integration reference for AmdBridge/lmxxf lifecycle and backend switching",
     "live_replace_policy": "do not replace the live AMDNR host with this package while FSR Ray Regeneration is required",
-    "quality_note": "Its adaptive ViT reuse defaults are performance-oriented and slightly lossy; keep adaptive reuse off for the CONTROL quality baseline."
+    "quality_note": "1.9.9.1 fixes resource lifetime/backend-switching and unbounded diagnostic logging, but still uses upstream lmxxf 0.37. Keep adaptive/lossy temporal reuse off for the CONTROL quality baseline."
   },
   "staged_or_beta_scan": {
     "lmxxf_open_pr_12": {
@@ -168,9 +169,9 @@
     "daniel_public_beta_newer_than_0_5_1_found": false,
     "notes": [
       "No hidden FSR 4.1.2/4.2 or RR 1.2.1 public beta was found in the scanned official branches/releases/PRs.",
-      "TheAutomatic v1.9.8.1 remains the current stable integration reference and explicitly supports Daniel 0.5.1.",
-      "Daniel 0.5.1 is now public; its tag shares the v0.5.0 source tree, so runtime performance claims are tracked as packaged-build behavior rather than a source patch.",
-      "lmxxf main is intentionally tracked separately from tag 0.38 because accepted bit-exact work continues after the stable package."
+      "TheAutomatic v1.9.9.1 is now the current stable integration reference; it adds lifecycle/logging fixes and compatibility for a future Daniel 0.6.0 layout while public Daniel latest remains 0.5.1.",
+      "Mochizuki v0.0.3 now packages an experimental Windows preview; its core CONTROL-relevant motion/history semantics are unchanged from 0.0.2.5.",
+      "lmxxf 0.39 is the newest tag; quality-first CONTROL remains pinned to the validated exact 0edf4bd production state while tracking later default-off/negative experiments through ca54996e."
     ]
   }
 }

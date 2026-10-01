@@ -70,13 +70,13 @@ if policy["lossy_optimizations_default"]:
     raise RuntimeError("Lossy optimizations must not be enabled by default")
 
 lmxxf = PINS["lmxxf_rdna4"]
-if lmxxf["stable_release"] != "0.38":
-    raise RuntimeError(f"Expected audited lmxxf stable release 0.38, got {lmxxf['stable_release']}")
+if lmxxf["stable_release"] != "0.39":
+    raise RuntimeError(f"Expected audited lmxxf stable release 0.39, got {lmxxf['stable_release']}")
 if lmxxf["source_commit"] not in lmxxf["accepted_post_0_38_bit_exact_commits"]:
     raise RuntimeError("lmxxf source_commit must be one of the explicitly accepted post-0.38 bit-exact commits")
 if lmxxf["source_commit"] != "0edf4bd86e55598e986ef533ba78a22120779bb6":
     raise RuntimeError("lmxxf quality-safe production pin must be the validated 0edf4bd install state")
-if lmxxf["latest_repo_commit_seen"] != "beea366971f9f0d45db8cbc653722095de2458ae":
+if lmxxf["latest_repo_commit_seen"] != "ca54996e6f8e0e799258f6bca8e99eb25f2c1596":
     raise RuntimeError("lmxxf latest-seen pin is stale")
 if lmxxf["stable_effect"]["lossy_1088_rows"] != "off by default":
     raise RuntimeError("Lossy 1088-row mode must remain off by default")
@@ -84,12 +84,12 @@ if not any(item.get("commit") == "5a7cd0ba3a4ef8cbaf108a870994b5d7e7ea17cd" for 
     raise RuntimeError("Shelved lmxxf lossy fast-tier commit must remain explicitly excluded")
 
 mochi = PINS["mochizuki_dlssnr_amd"]
-if mochi["release"] != "v0.0.2.5" or not mochi["source_commit"]:
-    raise RuntimeError("Mochizuki moving-picture reference is not pinned to v0.0.2.5")
+if mochi["release"] != "v0.0.3" or not mochi["source_commit"]:
+    raise RuntimeError("Mochizuki moving-picture reference is not pinned to v0.0.3")
 
 theautomatic = PINS["theautomatic"]
-if theautomatic["release"] != "v1.9.8.1" or not theautomatic["source_commit"]:
-    raise RuntimeError("TheAutomatic integration reference is not pinned to v1.9.8.1")
+if theautomatic["release"] != "v1.9.9.1" or not theautomatic["source_commit"]:
+    raise RuntimeError("TheAutomatic integration reference is not pinned to v1.9.9.1")
 if not theautomatic.get("daniel_0_5_1_layout_supported"):
     raise RuntimeError("TheAutomatic reference must record Daniel 0.5.1 layout support")
 
