@@ -45,6 +45,14 @@ checks = {
         "sl::PreferenceFlags::eLoadDownloadedPlugins",
     ],
     "OptiScaler/Config.h": ["CustomOptional<bool> DisableOTA { false };"],
+    "OptiScaler/dlssnr/DlssNr_Proxy.cpp": [
+        'SetUInt(params, "DLSSNR.DepthSubrectBaseX", depthBaseX)',
+        'SetUInt(params, "DLSSNR.MVecSubrectBaseX", motionBaseX)',
+    ],
+    "OptiScaler/dlssnr/forwarder/dlssnr_forwarder.cpp": [
+        'setUInt(capabilityParams, "DLSSNR.DepthSubrectBaseX", depthBaseX)',
+        'setUInt(capabilityParams, "DLSSNR.MVecSubrectBaseX", motionBaseX)',
+    ],
 }
 for rel, needles in checks.items():
     text = (ROOT / rel).read_text(encoding="utf-8-sig")
@@ -77,8 +85,16 @@ theautomatic = PINS["theautomatic"]
 if theautomatic["release"] != "v1.9.8.1" or not theautomatic["source_commit"]:
     raise RuntimeError("TheAutomatic integration reference is not pinned to v1.9.8.1")
 
+amdnr = PINS["amdnr"]
+if amdnr["core_release"] != "0.3.5" or amdnr.get("core_release_tag") != "Alpha0.3.5":
+    raise RuntimeError("AMDNR core baseline must be the public 0.3.5 release")
+if not amdnr.get("future_core_0_3_5_public"):
+    raise RuntimeError("AMDNR 0.3.5 must be recorded as public")
+if not amdnr.get("core_release_commit") or not amdnr.get("latest_repo_commit_seen"):
+    raise RuntimeError("AMDNR release and latest-seen commits must both be pinned")
+
 print(
     "pins OK: FSR SDK 2.3.0 / FSR 4.1.1 / FG 4.0.1 / RR 1.2.0; "
     f"lmxxf stable {lmxxf['stable_release']} + accepted source {lmxxf['source_commit'][:12]}; "
-    f"Mochizuki {mochi['release']}; TheAutomatic {theautomatic['release']}"
+    f"Mochizuki {mochi['release']}; TheAutomatic {theautomatic['release']}; AMDNR {amdnr['core_release']}"
 )

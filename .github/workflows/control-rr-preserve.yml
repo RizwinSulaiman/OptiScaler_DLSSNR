@@ -51,6 +51,7 @@ jobs:
           Assert-GitCommit "lmxxf-accepted-post-0.38" $pins.lmxxf_rdna4.repository $pins.lmxxf_rdna4.source_commit
           Assert-GitCommit "mochizuki-0.0.2.5" $pins.mochizuki_dlssnr_amd.repository $pins.mochizuki_dlssnr_amd.source_commit
           Assert-GitCommit "theautomatic-1.9.8.1" $pins.theautomatic.repository $pins.theautomatic.source_commit
+          Assert-GitCommit "amdnr-0.3.5-release" $pins.amdnr.repository $pins.amdnr.core_release_commit
           Assert-GitCommit "amdnr-latest-seen" $pins.amdnr.repository $pins.amdnr.latest_repo_commit_seen
 
           Write-Host "Quality gate: lossy 1088-row and adaptive reuse remain off; open lmxxf PR #12 is tracked but not adopted."

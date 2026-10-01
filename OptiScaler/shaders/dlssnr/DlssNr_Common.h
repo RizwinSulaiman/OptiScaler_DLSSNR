@@ -96,6 +96,13 @@ struct DlssNrFrameInfo
     // available and is what gets used.
     unsigned int RenderSubrectWidth = 0;
     unsigned int RenderSubrectHeight = 0;
+
+    // Origins for depth and motion-vector guide regions. NVIDIA honours these independently;
+    // forcing them to zero reprojects from the wrong pixels in titles that render guides into an offset subrect.
+    unsigned int DepthSubrectBaseX = 0;
+    unsigned int DepthSubrectBaseY = 0;
+    unsigned int MotionSubrectBaseX = 0;
+    unsigned int MotionSubrectBaseY = 0;
 };
 
 struct alignas(256) DlssNrConstants

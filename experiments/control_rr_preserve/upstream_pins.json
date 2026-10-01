@@ -45,12 +45,17 @@
   },
   "amdnr": {
     "repository": "3zwr1/AMD-NR---OptiScaler",
-    "core_release": "0.3.4.2",
-    "latest_repo_commit_seen": "37910d011bc97131d2171cc3690c91d82baa6c06",
+    "core_release": "0.3.5",
+    "core_release_tag": "Alpha0.3.5",
+    "core_release_commit": "b6360abf3a727be6a9c4db65df293d8ae06b9bae",
+    "release_published_utc": "2026-10-01T03:05:49Z",
+    "latest_repo_commit_seen": "d7d661827df2699d56a126dc50b139b72f6a9c65",
     "launcher_version": "0.3.5",
+    "bundled_lmxxf": "0.37",
     "daniel_runtime_supported": "0.5.0",
-    "future_core_0_3_5_public": false,
-    "late_scan_note": "September 30 commits after the release only update launcher manifest metadata for the forwarder; no newer neural or FSR-RR core was published."
+    "future_core_0_3_5_public": true,
+    "control_resonant_note": "0.3.5 includes the second-swapchain/frame-generation crash fix and Ray Regeneration diagnostics.",
+    "late_scan_note": "AMDNR 0.3.5 is public. Commits after the Alpha0.3.5 tag are launcher/manifest follow-ups; keep the core release commit pinned separately from latest_repo_commit_seen."
   },
   "daniel_runtime": {
     "repository": "danielblnc/DLSS-NR-on-AMD",

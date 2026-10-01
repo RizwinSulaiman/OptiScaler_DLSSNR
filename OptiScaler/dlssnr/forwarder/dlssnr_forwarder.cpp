@@ -785,7 +785,9 @@ __declspec(dllexport) int dlssnr_call_evaluate(ID3D12GraphicsCommandList *cmd, v
                                                ID3D12Resource *depth, ID3D12Resource *motion,
                                                ID3D12Resource *output, unsigned int width,
                                                unsigned int height, unsigned int guideWidth,
-                                               unsigned int guideHeight, int depthInverted, int reset,
+                                               unsigned int guideHeight, unsigned int depthBaseX,
+                                               unsigned int depthBaseY, unsigned int motionBaseX,
+                                               unsigned int motionBaseY, int depthInverted, int reset,
                                                float intensity, int style, float localStructure,
                                                float localTone, float skinStructure, int useAutoMask,
                                                float mvScaleX, float mvScaleY) {
@@ -813,12 +815,12 @@ __declspec(dllexport) int dlssnr_call_evaluate(ID3D12GraphicsCommandList *cmd, v
     setUInt(capabilityParams, "DLSSNR.OutputSubrectBaseY", 0);
     setUInt(capabilityParams, "DLSSNR.OutputSubrectWidth", width);
     setUInt(capabilityParams, "DLSSNR.OutputSubrectHeight", height);
-    setUInt(capabilityParams, "DLSSNR.DepthSubrectBaseX", 0);
-    setUInt(capabilityParams, "DLSSNR.DepthSubrectBaseY", 0);
+    setUInt(capabilityParams, "DLSSNR.DepthSubrectBaseX", depthBaseX);
+    setUInt(capabilityParams, "DLSSNR.DepthSubrectBaseY", depthBaseY);
     setUInt(capabilityParams, "DLSSNR.DepthSubrectWidth", guideWidth);
     setUInt(capabilityParams, "DLSSNR.DepthSubrectHeight", guideHeight);
-    setUInt(capabilityParams, "DLSSNR.MVecSubrectBaseX", 0);
-    setUInt(capabilityParams, "DLSSNR.MVecSubrectBaseY", 0);
+    setUInt(capabilityParams, "DLSSNR.MVecSubrectBaseX", motionBaseX);
+    setUInt(capabilityParams, "DLSSNR.MVecSubrectBaseY", motionBaseY);
     setUInt(capabilityParams, "DLSSNR.MVecSubrectWidth", guideWidth);
     setUInt(capabilityParams, "DLSSNR.MVecSubrectHeight", guideHeight);
 

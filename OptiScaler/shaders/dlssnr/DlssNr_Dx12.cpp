@@ -154,8 +154,9 @@ using PFN_NrCreate = void*(__cdecl*) (const wchar_t*, const wchar_t*, ID3D12Devi
                                       float, int, float, float, float, int, int);
 using PFN_NrEvaluate = int(__cdecl*) (ID3D12GraphicsCommandList*, void*, void*, ID3D12Resource*,
                                       ID3D12Resource*, ID3D12Resource*, ID3D12Resource*, unsigned int,
-                                      unsigned int, unsigned int, unsigned int, int, int, float, int,
-                                      float, float, float, int, float, float);
+                                      unsigned int, unsigned int, unsigned int, unsigned int, unsigned int,
+                                      unsigned int, unsigned int, int, int, float, int, float, float, float, int,
+                                      float, float);
 using PFN_NrRelease = void(__cdecl*) (void*);
 using PFN_NrSetExtras = void(__cdecl*) (void*, float, ID3D12Resource*, ID3D12Resource*, ID3D12Resource*,
                                         unsigned int, unsigned int, unsigned int, unsigned int);
@@ -323,6 +324,10 @@ struct NrState
     // long after that call has returned.
     unsigned int guideWidth = 0;
     unsigned int guideHeight = 0;
+    unsigned int guideDepthBaseX = 0;
+    unsigned int guideDepthBaseY = 0;
+    unsigned int guideMotionBaseX = 0;
+    unsigned int guideMotionBaseY = 0;
 
     // How the game encodes its guides, as the game itself reports it. Captured with the guides, since
     // the finished-frame path runs long after the upscaler's call has returned.
@@ -1582,6 +1587,10 @@ void DlssNr_Dx12::Dispatch(ID3D12GraphicsCommandList* cmdList, ID3D12Resource* c
 
     g_nr.guideWidth = guideWidth;
     g_nr.guideHeight = guideHeight;
+    g_nr.guideDepthBaseX = frame.DepthSubrectBaseX;
+    g_nr.guideDepthBaseY = frame.DepthSubrectBaseY;
+    g_nr.guideMotionBaseX = frame.MotionSubrectBaseX;
+    g_nr.guideMotionBaseY = frame.MotionSubrectBaseY;
     g_nr.guideDepthInverted = frame.DepthInverted;
 
     // The game's own encoding, passed through. Every resource already carries a subrect saying how
@@ -1646,6 +1655,7 @@ void DlssNr_Dx12::Dispatch(ID3D12GraphicsCommandList* cmdList, ID3D12Resource* c
             unsigned int outW = 0, outH = 0, subW = 0, subH = 0;
             unsigned int depthW = 0, depthH = 0, motionW = 0, motionH = 0;
             unsigned int guideW = 0, guideH = 0;
+            unsigned int depthBaseX = 0, depthBaseY = 0, motionBaseX = 0, motionBaseY = 0;
             float mvX = 0.0f, mvY = 0.0f;
             bool inverted = false, valid = false;
         };
@@ -1654,15 +1664,18 @@ void DlssNr_Dx12::Dispatch(ID3D12GraphicsCommandList* cmdList, ID3D12Resource* c
             width, (unsigned int) height, frame.RenderSubrectWidth, frame.RenderSubrectHeight,
             (unsigned int) depthDiag.Width, depthDiag.Height,
             (unsigned int) motionDiag.Width, motionDiag.Height,
-            guideWidth, guideHeight, frame.MvScaleX, frame.MvScaleY, frame.DepthInverted, true
+            guideWidth, guideHeight, frame.DepthSubrectBaseX, frame.DepthSubrectBaseY,
+            frame.MotionSubrectBaseX, frame.MotionSubrectBaseY, frame.MvScaleX, frame.MvScaleY,
+            frame.DepthInverted, true
         };
         if (!last.valid || std::memcmp(&last, &now, sizeof(ControlDiagState)) != 0)
         {
             last = now;
-            LOG_INFO("CONTROL NR diag: output {}x{}, render subrect {}x{}, depth {}x{}, motion {}x{}, "
-                     "active guides {}x{}, MV scale {}x{}, depth {}, reset {}",
+            LOG_INFO("CONTROL NR diag: output {}x{}, render subrect {}x{}, depth {}x{} @ {},{}, "
+                     "motion {}x{} @ {},{}, active guides {}x{}, MV scale {}x{}, depth {}, reset {}",
                      now.outW, now.outH, now.subW, now.subH, now.depthW, now.depthH,
-                     now.motionW, now.motionH, now.guideW, now.guideH, now.mvX, now.mvY,
+                     now.depthBaseX, now.depthBaseY, now.motionW, now.motionH, now.motionBaseX,
+                     now.motionBaseY, now.guideW, now.guideH, now.mvX, now.mvY,
                      now.inverted ? "inverted" : "normal", frame.Reset);
         }
 
@@ -2195,7 +2208,8 @@ void DlssNr_Dx12::Dispatch(ID3D12GraphicsCommandList* cmdList, ID3D12Resource* c
     {
         const unsigned int proxyResult = DlssNr::Proxy::Run(
             cmdList, device, modelInput, depthIn, motionIn, g_nr.output, workWidth, workHeight,
-            guideWidth, guideHeight, g_nr.guideDepthInverted, g_nr.reset,
+            guideWidth, guideHeight, g_nr.guideDepthBaseX, g_nr.guideDepthBaseY,
+            g_nr.guideMotionBaseX, g_nr.guideMotionBaseY, g_nr.guideDepthInverted, g_nr.reset,
             g_nr.guideMvScaleX * mvToWork, g_nr.guideMvScaleY * mvToWork);
 
         g_nr.reset = false;
@@ -2220,7 +2234,8 @@ void DlssNr_Dx12::Dispatch(ID3D12GraphicsCommandList* cmdList, ID3D12Resource* c
     // feature-creation hang, and the colour core is not settled enough to build on. One evaluate.
     const int result = g_nr.evaluate(
         cmdList, g_nr.feature, g_nr.capabilityParams, modelInput, depthIn, motionIn, g_nr.output,
-        workWidth, workHeight, guideWidth, guideHeight, g_nr.guideDepthInverted ? 1 : 0,
+        workWidth, workHeight, guideWidth, guideHeight, g_nr.guideDepthBaseX, g_nr.guideDepthBaseY,
+        g_nr.guideMotionBaseX, g_nr.guideMotionBaseY, g_nr.guideDepthInverted ? 1 : 0,
         g_nr.reset ? 1 : 0, cfg.DlssNrIntensity.value_or_default(),
         (int) cfg.DlssNrStyle.value_or_default(), cfg.DlssNrLocalStructure.value_or_default(),
         cfg.DlssNrLocalTone.value_or_default(), cfg.DlssNrSkinStructure.value_or_default(),
@@ -2577,6 +2592,10 @@ void EvaluateAfterUpscale(ID3D12GraphicsCommandList* cmdList, NVSDK_NGX_Paramete
     // How much of the guides is real. See DlssNrFrameInfo -- zero means the game did not say.
     params->Get(NVSDK_NGX_Parameter_DLSS_Render_Subrect_Dimensions_Width, &frame.RenderSubrectWidth);
     params->Get(NVSDK_NGX_Parameter_DLSS_Render_Subrect_Dimensions_Height, &frame.RenderSubrectHeight);
+    params->Get(NVSDK_NGX_Parameter_DLSS_Input_Depth_Subrect_Base_X, &frame.DepthSubrectBaseX);
+    params->Get(NVSDK_NGX_Parameter_DLSS_Input_Depth_Subrect_Base_Y, &frame.DepthSubrectBaseY);
+    params->Get(NVSDK_NGX_Parameter_DLSS_Input_MV_SubrectBase_X, &frame.MotionSubrectBaseX);
+    params->Get(NVSDK_NGX_Parameter_DLSS_Input_MV_SubrectBase_Y, &frame.MotionSubrectBaseY);
 
     if (params->Get(NVSDK_NGX_Parameter_MV_Scale_X, &frame.MvScaleX) != NVSDK_NGX_Result_Success)
         frame.MvScaleX = 1.0f;
