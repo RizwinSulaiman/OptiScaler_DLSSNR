@@ -57,6 +57,7 @@ insert = '''    if (cfg.DlssNrControlDiagnostics.value_or_default())
             unsigned int outW = 0, outH = 0, subW = 0, subH = 0;
             unsigned int depthW = 0, depthH = 0, motionW = 0, motionH = 0;
             unsigned int guideW = 0, guideH = 0;
+            unsigned int depthBaseX = 0, depthBaseY = 0, motionBaseX = 0, motionBaseY = 0;
             float mvX = 0.0f, mvY = 0.0f;
             bool inverted = false, valid = false;
         };
@@ -65,15 +66,18 @@ insert = '''    if (cfg.DlssNrControlDiagnostics.value_or_default())
             width, (unsigned int) height, frame.RenderSubrectWidth, frame.RenderSubrectHeight,
             (unsigned int) depthDiag.Width, depthDiag.Height,
             (unsigned int) motionDiag.Width, motionDiag.Height,
-            guideWidth, guideHeight, frame.MvScaleX, frame.MvScaleY, frame.DepthInverted, true
+            guideWidth, guideHeight, frame.DepthSubrectBaseX, frame.DepthSubrectBaseY,
+            frame.MotionSubrectBaseX, frame.MotionSubrectBaseY, frame.MvScaleX, frame.MvScaleY,
+            frame.DepthInverted, true
         };
         if (!last.valid || std::memcmp(&last, &now, sizeof(ControlDiagState)) != 0)
         {
             last = now;
-            LOG_INFO("CONTROL NR diag: output {}x{}, render subrect {}x{}, depth {}x{}, motion {}x{}, "
-                     "active guides {}x{}, MV scale {}x{}, depth {}, reset {}",
+            LOG_INFO("CONTROL NR diag: output {}x{}, render subrect {}x{}, depth {}x{} @ {},{}, "
+                     "motion {}x{} @ {},{}, active guides {}x{}, MV scale {}x{}, depth {}, reset {}",
                      now.outW, now.outH, now.subW, now.subH, now.depthW, now.depthH,
-                     now.motionW, now.motionH, now.guideW, now.guideH, now.mvX, now.mvY,
+                     now.depthBaseX, now.depthBaseY, now.motionW, now.motionH, now.motionBaseX,
+                     now.motionBaseY, now.guideW, now.guideH, now.mvX, now.mvY,
                      now.inverted ? "inverted" : "normal", frame.Reset);
         }
 
