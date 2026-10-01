@@ -60,9 +60,9 @@ for rel, needles in checks.items():
         if needle not in text:
             raise RuntimeError(f"{rel}: missing required CONTROL contract: {needle}")
 
-# Quality-first governance for the late Sep-30 sync.  Stable and post-release refs are both recorded:
+# Quality-first governance. Stable and post-release refs are both recorded:
 # stable is the reproducible package baseline; source_commit may move only to an explicitly accepted,
-# bit-exact post-release production state.  Known lossy paths stay opt-in/off.
+# bit-exact post-release production state. Known lossy paths stay opt-in/off.
 policy = PINS["policy"]
 if not policy["quality_first"] or not policy["bit_exact_optimizations_default"]:
     raise RuntimeError("CONTROL upstream policy must stay quality-first with bit-exact optimizations enabled")
@@ -74,8 +74,14 @@ if lmxxf["stable_release"] != "0.38":
     raise RuntimeError(f"Expected audited lmxxf stable release 0.38, got {lmxxf['stable_release']}")
 if lmxxf["source_commit"] not in lmxxf["accepted_post_0_38_bit_exact_commits"]:
     raise RuntimeError("lmxxf source_commit must be one of the explicitly accepted post-0.38 bit-exact commits")
+if lmxxf["source_commit"] != "0edf4bd86e55598e986ef533ba78a22120779bb6":
+    raise RuntimeError("lmxxf quality-safe production pin must be the validated 0edf4bd install state")
+if lmxxf["latest_repo_commit_seen"] != "beea366971f9f0d45db8cbc653722095de2458ae":
+    raise RuntimeError("lmxxf latest-seen pin is stale")
 if lmxxf["stable_effect"]["lossy_1088_rows"] != "off by default":
     raise RuntimeError("Lossy 1088-row mode must remain off by default")
+if not any(item.get("commit") == "5a7cd0ba3a4ef8cbaf108a870994b5d7e7ea17cd" for item in lmxxf["do_not_enable_by_default"]):
+    raise RuntimeError("Shelved lmxxf lossy fast-tier commit must remain explicitly excluded")
 
 mochi = PINS["mochizuki_dlssnr_amd"]
 if mochi["release"] != "v0.0.2.5" or not mochi["source_commit"]:
@@ -84,6 +90,8 @@ if mochi["release"] != "v0.0.2.5" or not mochi["source_commit"]:
 theautomatic = PINS["theautomatic"]
 if theautomatic["release"] != "v1.9.8.1" or not theautomatic["source_commit"]:
     raise RuntimeError("TheAutomatic integration reference is not pinned to v1.9.8.1")
+if not theautomatic.get("daniel_0_5_1_layout_supported"):
+    raise RuntimeError("TheAutomatic reference must record Daniel 0.5.1 layout support")
 
 amdnr = PINS["amdnr"]
 if amdnr["core_release"] != "0.3.5" or amdnr.get("core_release_tag") != "Alpha0.3.5":
@@ -92,9 +100,21 @@ if not amdnr.get("future_core_0_3_5_public"):
     raise RuntimeError("AMDNR 0.3.5 must be recorded as public")
 if not amdnr.get("core_release_commit") or not amdnr.get("latest_repo_commit_seen"):
     raise RuntimeError("AMDNR release and latest-seen commits must both be pinned")
+if amdnr.get("daniel_runtime_supported") != "0.5.1":
+    raise RuntimeError("AMDNR compatibility record must recognize public Daniel 0.5.1")
+
+daniel = PINS["daniel_runtime"]
+if daniel.get("public_release") != "0.5.1":
+    raise RuntimeError("Daniel runtime baseline must be public 0.5.1")
+if daniel.get("release_commit") != "ead70619c39278366030a7194aaf0634e6af59bb":
+    raise RuntimeError("Daniel 0.5.1 release commit pin drift")
+if "Reference" not in daniel.get("quality_policy", ""):
+    raise RuntimeError("Daniel Reference mode must remain the CONTROL quality-first baseline")
 
 print(
     "pins OK: FSR SDK 2.3.0 / FSR 4.1.1 / FG 4.0.1 / RR 1.2.0; "
-    f"lmxxf stable {lmxxf['stable_release']} + accepted source {lmxxf['source_commit'][:12]}; "
-    f"Mochizuki {mochi['release']}; TheAutomatic {theautomatic['release']}; AMDNR {amdnr['core_release']}"
+    f"lmxxf stable {lmxxf['stable_release']} + exact source {lmxxf['source_commit'][:12]} "
+    f"(latest seen {lmxxf['latest_repo_commit_seen'][:12]}); "
+    f"Daniel {daniel['public_release']}; Mochizuki {mochi['release']}; "
+    f"TheAutomatic {theautomatic['release']}; AMDNR {amdnr['core_release']}"
 )
