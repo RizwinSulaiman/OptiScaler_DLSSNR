@@ -1,5 +1,5 @@
 {
-  "snapshot_utc": "2026-09-30T20:13:33Z",
+  "snapshot_utc": "2026-10-01T08:10:52Z",
   "policy": {
     "quality_first": true,
     "bit_exact_optimizations_default": true,
@@ -16,7 +16,7 @@
     "fsr_frame_generation": "4.0.1",
     "fsr_ray_regeneration": "1.2.0",
     "notes": [
-      "No newer public or prerelease FSR SDK was found in the late September 30 scan.",
+      "No newer public or prerelease FSR SDK was found in the October 1 scan.",
       "This commit is already the external/FidelityFX-SDK-v2 gitlink on the experiment branch.",
       "RR 1.2 uses view/projection matrices and signed linear depth/depth-delta semantics; CONTROL diagnostics must validate those contracts before RR quality conclusions."
     ]
@@ -52,32 +52,33 @@
     "latest_repo_commit_seen": "d7d661827df2699d56a126dc50b139b72f6a9c65",
     "launcher_version": "0.3.5",
     "bundled_lmxxf": "0.37",
-    "daniel_runtime_supported": "0.5.0",
+    "daniel_runtime_supported": "0.5.1",
     "future_core_0_3_5_public": true,
     "control_resonant_note": "0.3.5 includes the second-swapchain/frame-generation crash fix and Ray Regeneration diagnostics.",
-    "late_scan_note": "AMDNR 0.3.5 is public. Commits after the Alpha0.3.5 tag are launcher/manifest follow-ups; keep the core release commit pinned separately from latest_repo_commit_seen."
+    "late_scan_note": "AMDNR 0.3.5 is public. Commits after the Alpha0.3.5 tag are launcher/manifest follow-ups; keep the core release commit pinned separately from latest_repo_commit_seen. Daniel 0.5.1 is now public and is compatible with the surrounding integration references."
   },
   "daniel_runtime": {
     "repository": "danielblnc/DLSS-NR-on-AMD",
-    "public_release": "0.5.0",
-    "published_utc": "2026-09-29T14:22:46Z",
-    "rdna4_claim": "5% faster than 0.4.3 plus richer/higher-detail output",
-    "private_or_supporter_layout_seen": "0.5.1",
-    "private_or_supporter_policy": "Track compatibility only; do not label 0.5.1 as a public release or distribute it."
+    "public_release": "0.5.1",
+    "release_commit": "ead70619c39278366030a7194aaf0634e6af59bb",
+    "published_utc": "2026-10-01T02:37:26Z",
+    "rdna4_claim": "8% faster in Fast mode and 6% faster in Reference mode on RX 9000/RDNA4.",
+    "source_tree_note": "The v0.5.1 tag points at the same source tree as v0.5.0; the advertised RDNA4 gain is therefore packaged-runtime/build behavior rather than a cherry-pickable source delta.",
+    "quality_policy": "Track Reference as the quality-first baseline; Fast is optional and is not made the CONTROL default."
   },
   "lmxxf_rdna4": {
     "repository": "lmxxf/dlss5-on-amd-9070xt-porting",
     "stable_release": "0.38",
     "stable_release_commit": "e1b1a18c71d063431788ea0ec8dcf1ccb7c2de08",
-    "source_commit": "e65ba051ddd0f027a16cdfc82134096d77bcfba1",
-    "latest_repo_commit_seen": "640493c9809f86eb078bdfd178c373ac0dc277b2",
-    "accepted_through": "2026-09-30T19:42:14Z",
-    "latest_seen_utc": "2026-09-30T20:13:33Z",
-    "pin_reason": "0.38 is the reproducible stable package baseline. e65ba051 is the latest inspected post-0.38 commit whose production change was explicitly accepted/installed and bit-exact; later 48a14184, 4c207ff4 and 640493c9 record smoke/ledger or candidates that were null, not taken, or slower, so the quality-first post-release source pin stops at e65ba051.",
+    "source_commit": "0edf4bd86e55598e986ef533ba78a22120779bb6",
+    "latest_repo_commit_seen": "beea366971f9f0d45db8cbc653722095de2458ae",
+    "accepted_through": "2026-10-01T08:10:14Z",
+    "latest_seen_utc": "2026-10-01T08:10:52Z",
+    "pin_reason": "0.38 remains the reproducible stable package baseline. 0edf4bd is the latest inspected quality-safe production state: it installs the rebuilt df92ed49 exact build, records 62 modules plus add-on/runtime assets, and reports RE9 replay SAME with smoke 0. Intervening accepted work includes W2 Up/QKV/FFN organization cuts and FP8 weight WMMA where the original data is already on the E4M3 lattice. Lossy fast-tier experiments were explicitly shelved and remain excluded from the CONTROL baseline. The later 9383b7c/e42057e2/beea366 commits only fix WorkingPlan path text, so latest-seen is tracked separately from the accepted production pin.",
     "stable_effect": {
-      "900_tier_ms": "about 8.0 -> 7.6",
-      "1080_tier_ms": "about 10.8 -> 10.4",
-      "default_output": "bit-identical to 0.37",
+      "900_tier_ms": "about 8.0 -> 7.6 at the 0.38 baseline, with additional exact post-0.38 cuts accepted afterward",
+      "1080_tier_ms": "about 10.8 -> 10.4 at the 0.38 baseline, with additional exact post-0.38 cuts accepted afterward",
+      "default_output": "quality-first exact path; no lossy fast tier enabled",
       "lossy_1088_rows": "off by default"
     },
     "accepted_post_0_38_bit_exact_commits": [
@@ -86,7 +87,18 @@
       "e5069f0788f3398ea714a65a1b3db984f2bda79b",
       "7acaffb11712fa84c67b4360a6a999bf4a0aa91c",
       "e4c3ecb1c0949f5adef7891e3db04cfd9e94d7c8",
-      "e65ba051ddd0f027a16cdfc82134096d77bcfba1"
+      "e65ba051ddd0f027a16cdfc82134096d77bcfba1",
+      "d600b65196cda04547aa805dfa615e143f84cb18",
+      "96efbc3db4bf89698cf09b75dbf8f67ab77160e7",
+      "3f357c71e173d2a6b21c56afa9535e51f3112f0c",
+      "7a68d6904b82e94226b00755db32ecbb8e3934ee",
+      "754acc445f3339f5c7dcbea248108a9a36ad39eb",
+      "b37aa5b48231928d514b0542685640836bd1385d",
+      "79114a61ad701af1d5fbd4252fc68c659677adde",
+      "e22d15a242d661de76f28ca44452ec8aefe51ac2",
+      "449bbab300d69a08e294cc9dc28f81541b81c3e6",
+      "df92ed4915e836a3606309bc81747c6645597000",
+      "0edf4bd86e55598e986ef533ba78a22120779bb6"
     ],
     "do_not_enable_by_default": [
       {
@@ -108,6 +120,10 @@
       {
         "commit": "b0312ac2",
         "reason": "ViT gather fold/C512 dead-store experiment was bit-exact but not taken; macros stay off."
+      },
+      {
+        "commit": "5a7cd0ba3a4ef8cbaf108a870994b5d7e7ea17cd",
+        "reason": "Lossy fast-tier recipe was opt-in only and was later shelved; do not make it a CONTROL default."
       },
       {
         "feature": "adaptive ViT reuse",
@@ -149,10 +165,11 @@
     },
     "fsr_sdk_beta_found": false,
     "amdnr_core_beta_found": false,
-    "daniel_public_beta_newer_than_0_5_0_found": false,
+    "daniel_public_beta_newer_than_0_5_1_found": false,
     "notes": [
       "No hidden FSR 4.1.2/4.2 or RR 1.2.1 public beta was found in the scanned official branches/releases/PRs.",
-      "TheAutomatic v1.9.8.1 is a stable release, not a beta, and was included because it contains integration work newer than our previous audit.",
+      "TheAutomatic v1.9.8.1 remains the current stable integration reference and explicitly supports Daniel 0.5.1.",
+      "Daniel 0.5.1 is now public; its tag shares the v0.5.0 source tree, so runtime performance claims are tracked as packaged-build behavior rather than a source patch.",
       "lmxxf main is intentionally tracked separately from tag 0.38 because accepted bit-exact work continues after the stable package."
     ]
   }
