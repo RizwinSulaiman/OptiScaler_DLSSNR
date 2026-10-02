@@ -76,7 +76,7 @@ if lmxxf["source_commit"] not in lmxxf["accepted_post_0_38_bit_exact_commits"]:
     raise RuntimeError("lmxxf source_commit must be one of the explicitly accepted post-0.38 bit-exact commits")
 if lmxxf["source_commit"] != "0edf4bd86e55598e986ef533ba78a22120779bb6":
     raise RuntimeError("lmxxf quality-safe production pin must be the validated 0edf4bd install state")
-if lmxxf["latest_repo_commit_seen"] != "ca54996e6f8e0e799258f6bca8e99eb25f2c1596":
+if lmxxf["latest_repo_commit_seen"] != "8af862408ae477f4d207304419483919f1a0d3f2":
     raise RuntimeError("lmxxf latest-seen pin is stale")
 if lmxxf["stable_effect"]["lossy_1088_rows"] != "off by default":
     raise RuntimeError("Lossy 1088-row mode must remain off by default")
@@ -100,6 +100,8 @@ if not amdnr.get("future_core_0_3_5_public"):
     raise RuntimeError("AMDNR 0.3.5 must be recorded as public")
 if not amdnr.get("core_release_commit") or not amdnr.get("latest_repo_commit_seen"):
     raise RuntimeError("AMDNR release and latest-seen commits must both be pinned")
+if not amdnr.get("full_source_public") or amdnr.get("full_source_snapshot_commit") != "a1818e87891cee0fe15fc4e6e3495746edcbf515":
+    raise RuntimeError("AMDNR full-source snapshot pin is stale or missing")
 if amdnr.get("daniel_runtime_supported") != "0.5.1":
     raise RuntimeError("AMDNR compatibility record must recognize public Daniel 0.5.1")
 

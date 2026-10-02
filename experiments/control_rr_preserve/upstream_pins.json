@@ -1,5 +1,5 @@
 {
-  "snapshot_utc": "2026-10-01T17:52:44Z",
+  "snapshot_utc": "2026-10-02T02:17:01Z",
   "policy": {
     "quality_first": true,
     "bit_exact_optimizations_default": true,
@@ -49,13 +49,22 @@
     "core_release_tag": "Alpha0.3.5",
     "core_release_commit": "b6360abf3a727be6a9c4db65df293d8ae06b9bae",
     "release_published_utc": "2026-10-01T03:05:49Z",
-    "latest_repo_commit_seen": "a4bb31f933d78d6c76b2ec0b2ded20ff587916b6",
+    "latest_repo_commit_seen": "a1818e87891cee0fe15fc4e6e3495746edcbf515",
     "launcher_version": "0.3.5",
     "bundled_lmxxf": "0.37",
     "daniel_runtime_supported": "0.5.1",
     "future_core_0_3_5_public": true,
     "control_resonant_note": "0.3.5 includes the second-swapchain/frame-generation crash fix and Ray Regeneration diagnostics.",
-    "late_scan_note": "AMDNR 0.3.5 is public. Commits after the Alpha0.3.5 tag are launcher/manifest follow-ups; keep the core release commit pinned separately from latest_repo_commit_seen. Daniel 0.5.1 is now public and is compatible with the surrounding integration references."
+    "late_scan_note": "AMDNR 0.3.5 remains the core release, but the Oct 2 upstream source uploads materially change integration work: the previously missing AmdBridge/AmdPreSr/SubmissionState/RuntimeHostLoad implementation is now public. Keep the core release pin separate from the moving source snapshot.",
+    "full_source_public": true,
+    "full_source_snapshot_commit": "a1818e87891cee0fe15fc4e6e3495746edcbf515",
+    "full_source_paths_verified": [
+      "main/AMDNR-source/optiscaler/dlssnr/amd/AmdBridge.cpp",
+      "main/AMDNR-source/optiscaler/dlssnr/amd/AmdPreSr.cpp",
+      "main/AMDNR-source/optiscaler/dlssnr/amd/SubmissionState.h",
+      "main/AMDNR-source/optiscaler/dlssnr/amd/RuntimeHostLoad.h"
+    ],
+    "source_unlock_note": "The old missing-source blocker is resolved. Next bounded work is to map the existing CONTROL MV/subrect/history patch onto the now-public AMDNR implementation and validate it without touching the live game install."
   },
   "daniel_runtime": {
     "repository": "danielblnc/DLSS-NR-on-AMD",
@@ -71,10 +80,10 @@
     "stable_release": "0.39",
     "stable_release_commit": "55966ef2a0444d88adedaee8df9033e40d3ed467",
     "source_commit": "0edf4bd86e55598e986ef533ba78a22120779bb6",
-    "latest_repo_commit_seen": "ca54996e6f8e0e799258f6bca8e99eb25f2c1596",
+    "latest_repo_commit_seen": "8af862408ae477f4d207304419483919f1a0d3f2",
     "accepted_through": "2026-10-01T08:10:14Z",
-    "latest_seen_utc": "2026-10-01T17:52:44Z",
-    "pin_reason": "0.39 is now the newest tagged package baseline. The CONTROL quality-safe production source pin stays at 0edf4bd: it is the validated exact install state with RE9 replay SAME and smoke 0. Later 0.39 packaging/runtime notes do not invalidate it; 82ce821f adds faster per-module scheduler recipe options but they are default-off, and ca54996e records follow-up candidates that failed ABBA/p99, so none are promoted into the CONTROL default.",
+    "latest_seen_utc": "2026-10-02T00:00:35Z",
+    "pin_reason": "0.39 remains the tagged package baseline. The CONTROL quality-safe production source pin stays at 0edf4bd until CONTROL visual validation: upstream 8af8624 has now installed the next-candidate after an LLVM23 barrier audit (HIP_BARRIER_FENCE), with 19 regression groups SAME and RE9 smoke/replay checks passing, but that is stronger cross-project evidence rather than direct CONTROL validation.",
     "stable_effect": {
       "900_tier_ms": "about 8.0 -> 7.6 at the prior 0.38 measured baseline; 0.39 is the current tag and the exact source pin remains separately validated",
       "1080_tier_ms": "about 10.8 -> 10.4 at the prior 0.38 measured baseline; 0.39 is the current tag and the exact source pin remains separately validated",
@@ -171,7 +180,8 @@
       "No hidden FSR 4.1.2/4.2 or RR 1.2.1 public beta was found in the scanned official branches/releases/PRs.",
       "TheAutomatic v1.9.9.1 is now the current stable integration reference; it adds lifecycle/logging fixes and compatibility for a future Daniel 0.6.0 layout while public Daniel latest remains 0.5.1.",
       "Mochizuki v0.0.3 now packages an experimental Windows preview; its core CONTROL-relevant motion/history semantics are unchanged from 0.0.2.5.",
-      "lmxxf 0.39 is the newest tag; quality-first CONTROL remains pinned to the validated exact 0edf4bd production state while tracking later default-off/negative experiments through ca54996e."
+      "lmxxf 0.39 remains the newest tag; upstream 8af8624 installed its fenced LLVM23 next-candidate after 19 SAME groups and RE9 validation. Track it, but keep CONTROL on the exact 0edf4bd production pin until CONTROL-specific visual validation.",
+      "AMDNR upstream a1818e8 now publishes the implementation files that were previously missing from the public snapshot, removing the source-availability blocker for a proper CONTROL motion/history port."
     ]
   }
 }
