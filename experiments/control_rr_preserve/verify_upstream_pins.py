@@ -76,7 +76,7 @@ if lmxxf["source_commit"] not in lmxxf["accepted_post_0_38_bit_exact_commits"]:
     raise RuntimeError("lmxxf source_commit must be one of the explicitly accepted post-0.38 bit-exact commits")
 if lmxxf["source_commit"] != "0edf4bd86e55598e986ef533ba78a22120779bb6":
     raise RuntimeError("lmxxf quality-safe production pin must be the validated 0edf4bd install state")
-if lmxxf["latest_repo_commit_seen"] != "8af862408ae477f4d207304419483919f1a0d3f2":
+if lmxxf["latest_repo_commit_seen"] != "fe4d1d734aa6e5aaa1e940229f11803bfe7e190f":
     raise RuntimeError("lmxxf latest-seen pin is stale")
 if lmxxf["stable_effect"]["lossy_1088_rows"] != "off by default":
     raise RuntimeError("Lossy 1088-row mode must remain off by default")
@@ -110,6 +110,8 @@ if daniel.get("public_release") != "0.5.1":
     raise RuntimeError("Daniel runtime baseline must be public 0.5.1")
 if daniel.get("release_commit") != "ead70619c39278366030a7194aaf0634e6af59bb":
     raise RuntimeError("Daniel 0.5.1 release commit pin drift")
+if daniel.get("tagged_unreleased_version") != "0.6.0" or daniel.get("tag_commit") != "12b994d4f3fb76c315730b899a11b4c0782e3090":
+    raise RuntimeError("Daniel tagged-unreleased 0.6.0 state is not recorded")
 if "Reference" not in daniel.get("quality_policy", ""):
     raise RuntimeError("Daniel Reference mode must remain the CONTROL quality-first baseline")
 

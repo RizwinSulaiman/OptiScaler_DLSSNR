@@ -1,5 +1,5 @@
 {
-  "snapshot_utc": "2026-10-02T02:17:01Z",
+  "snapshot_utc": "2026-10-02T04:20:04Z",
   "policy": {
     "quality_first": true,
     "bit_exact_optimizations_default": true,
@@ -71,6 +71,10 @@
     "public_release": "0.5.1",
     "release_commit": "ead70619c39278366030a7194aaf0634e6af59bb",
     "published_utc": "2026-10-01T02:37:26Z",
+    "tagged_unreleased_version": "0.6.0",
+    "tag_object": "e2e041624e8b7f16ea6c74cf05996d6701a36b6e",
+    "tag_commit": "12b994d4f3fb76c315730b899a11b4c0782e3090",
+    "tag_note": "An annotated v0.6.0 tag exists, but its commit has zero source diff from the 0.5.1 source state and GitHub latest release remains 0.5.1 with no v0.6.0 release asset. Track the tag; do not promote the CONTROL runtime baseline yet.",
     "rdna4_claim": "8% faster in Fast mode and 6% faster in Reference mode on RX 9000/RDNA4.",
     "source_tree_note": "The v0.5.1 tag points at the same source tree as v0.5.0; the advertised RDNA4 gain is therefore packaged-runtime/build behavior rather than a cherry-pickable source delta.",
     "quality_policy": "Track Reference as the quality-first baseline; Fast is optional and is not made the CONTROL default."
@@ -80,10 +84,10 @@
     "stable_release": "0.39",
     "stable_release_commit": "55966ef2a0444d88adedaee8df9033e40d3ed467",
     "source_commit": "0edf4bd86e55598e986ef533ba78a22120779bb6",
-    "latest_repo_commit_seen": "8af862408ae477f4d207304419483919f1a0d3f2",
+    "latest_repo_commit_seen": "fe4d1d734aa6e5aaa1e940229f11803bfe7e190f",
     "accepted_through": "2026-10-01T08:10:14Z",
-    "latest_seen_utc": "2026-10-02T00:00:35Z",
-    "pin_reason": "0.39 remains the tagged package baseline. The CONTROL quality-safe production source pin stays at 0edf4bd until CONTROL visual validation: upstream 8af8624 has now installed the next-candidate after an LLVM23 barrier audit (HIP_BARRIER_FENCE), with 19 regression groups SAME and RE9 smoke/replay checks passing, but that is stronger cross-project evidence rather than direct CONTROL validation.",
+    "latest_seen_utc": "2026-10-02T02:31:53Z",
+    "pin_reason": "0.39 remains the tagged package baseline. The CONTROL quality-safe production source pin stays at 0edf4bd until CONTROL visual validation. Upstream fe4d1d adds an appended, struct-size-negotiated GetTimings ABI and non-blocking HIP-stream timing telemetry; its commit reports 19 SAME x2, RE9 900/1080 SAME, smoke 0 and ABBA neutral, and explicitly says runtime 3103A0A7 was not installed. Track only; no CONTROL default promotion.",
     "stable_effect": {
       "900_tier_ms": "about 8.0 -> 7.6 at the prior 0.38 measured baseline; 0.39 is the current tag and the exact source pin remains separately validated",
       "1080_tier_ms": "about 10.8 -> 10.4 at the prior 0.38 measured baseline; 0.39 is the current tag and the exact source pin remains separately validated",
@@ -176,11 +180,12 @@
     "fsr_sdk_beta_found": false,
     "amdnr_core_beta_found": false,
     "daniel_public_beta_newer_than_0_5_1_found": false,
+    "daniel_v0_6_0_tag_found": true,
     "notes": [
       "No hidden FSR 4.1.2/4.2 or RR 1.2.1 public beta was found in the scanned official branches/releases/PRs.",
-      "TheAutomatic v1.9.9.1 is now the current stable integration reference; it adds lifecycle/logging fixes and compatibility for a future Daniel 0.6.0 layout while public Daniel latest remains 0.5.1.",
+      "TheAutomatic v1.9.9.1 remains the stable integration reference and already supports the Daniel 0.6.0 layout. Daniel now has an annotated v0.6.0 tag, but GitHub latest release remains 0.5.1 and no 0.6.0 release asset is published.",
       "Mochizuki v0.0.3 now packages an experimental Windows preview; its core CONTROL-relevant motion/history semantics are unchanged from 0.0.2.5.",
-      "lmxxf 0.39 remains the newest tag; upstream 8af8624 installed its fenced LLVM23 next-candidate after 19 SAME groups and RE9 validation. Track it, but keep CONTROL on the exact 0edf4bd production pin until CONTROL-specific visual validation.",
+      "lmxxf 0.39 remains the newest tag; upstream fe4d1d adds non-blocking network timing telemetry on top of the fenced candidate, with 19 SAME x2 and RE9 900/1080 SAME reported. It explicitly did not install runtime 3103A0A7. Track it, but keep CONTROL on exact 0edf4bd until CONTROL-specific visual validation.",
       "AMDNR upstream a1818e8 now publishes the implementation files that were previously missing from the public snapshot, removing the source-availability blocker for a proper CONTROL motion/history port."
     ]
   }
