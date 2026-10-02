@@ -1,5 +1,5 @@
 {
-  "snapshot_utc": "2026-10-02T04:20:04Z",
+  "snapshot_utc": "2026-10-02T19:20:30Z",
   "policy": {
     "quality_first": true,
     "bit_exact_optimizations_default": true,
@@ -45,17 +45,17 @@
   },
   "amdnr": {
     "repository": "3zwr1/AMD-NR---OptiScaler",
-    "core_release": "0.3.5",
-    "core_release_tag": "Alpha0.3.5",
-    "core_release_commit": "b6360abf3a727be6a9c4db65df293d8ae06b9bae",
-    "release_published_utc": "2026-10-01T03:05:49Z",
-    "latest_repo_commit_seen": "a1818e87891cee0fe15fc4e6e3495746edcbf515",
-    "launcher_version": "0.3.5",
-    "bundled_lmxxf": "0.37",
+    "core_release": "0.3.5.1",
+    "core_release_tag": "Alpha0.3.5.1",
+    "core_release_commit": "0f6b004b0b93ca4f481e43422fb1cbfde1f92d57",
+    "release_published_utc": "2026-10-02T12:00:47Z",
+    "latest_repo_commit_seen": "f58604df65b0a4676c72e831ddfff0cc40113c16",
+    "launcher_version": "0.3.5.4",
+    "bundled_lmxxf": "0.39",
     "daniel_runtime_supported": "0.5.1",
     "future_core_0_3_5_public": true,
-    "control_resonant_note": "0.3.5 includes the second-swapchain/frame-generation crash fix and Ray Regeneration diagnostics.",
-    "late_scan_note": "AMDNR 0.3.5 remains the core release, but the Oct 2 upstream source uploads materially change integration work: the previously missing AmdBridge/AmdPreSr/SubmissionState/RuntimeHostLoad implementation is now public. Keep the core release pin separate from the moving source snapshot.",
+    "control_resonant_note": "0.3.5.1 is the Oct 2 hotfix over 0.3.5: lmxxf 0.39, UE4 first-neural-frame crash fix, first-frame/module-walk stall reductions, tighter dynamic-resolution hold, and the Control second-swapchain/frame-generation fix remains included.",
+    "late_scan_note": "Use the 0.3.5.1 core release for CONTROL. The current main manifest at f58604df advertises launcher 0.3.5.4 under the same Alpha0.3.5.1 release asset; later repository commits are launcher/manifest metadata, not a newer core payload.",
     "full_source_public": true,
     "full_source_snapshot_commit": "a1818e87891cee0fe15fc4e6e3495746edcbf515",
     "full_source_paths_verified": [
@@ -84,10 +84,10 @@
     "stable_release": "0.39",
     "stable_release_commit": "55966ef2a0444d88adedaee8df9033e40d3ed467",
     "source_commit": "0edf4bd86e55598e986ef533ba78a22120779bb6",
-    "latest_repo_commit_seen": "fe4d1d734aa6e5aaa1e940229f11803bfe7e190f",
+    "latest_repo_commit_seen": "64d9cfdec0ff9507aba37491a6dae43df808a5a4",
     "accepted_through": "2026-10-01T08:10:14Z",
-    "latest_seen_utc": "2026-10-02T02:31:53Z",
-    "pin_reason": "0.39 remains the tagged package baseline. The CONTROL quality-safe production source pin stays at 0edf4bd until CONTROL visual validation. Upstream fe4d1d adds an appended, struct-size-negotiated GetTimings ABI and non-blocking HIP-stream timing telemetry; its commit reports 19 SAME x2, RE9 900/1080 SAME, smoke 0 and ABBA neutral, and explicitly says runtime 3103A0A7 was not installed. Track only; no CONTROL default promotion.",
+    "latest_seen_utc": "2026-10-02T19:20:30Z",
+    "pin_reason": "0.39 remains the tagged quality baseline. Today's later direct-I/O/timing/RTZ work is tracked through 64d9cf but is not promoted into CONTROL until real Control visual/gameplay validation; lossy 1088-row geometry stays off.",
     "stable_effect": {
       "900_tier_ms": "about 8.0 -> 7.6 at the prior 0.38 measured baseline; 0.39 is the current tag and the exact source pin remains separately validated",
       "1080_tier_ms": "about 10.8 -> 10.4 at the prior 0.38 measured baseline; 0.39 is the current tag and the exact source pin remains separately validated",
@@ -141,6 +141,16 @@
       {
         "feature": "adaptive ViT reuse",
         "reason": "Lossy temporal reuse can soften subtle motion; quality-first CONTROL validation keeps it off."
+      }
+    ],
+    "tracked_not_promoted": [
+      {
+        "commit": "cc10337376bde2d0fc6e5e2fc0148acd6e8ae193",
+        "reason": "Direct-input/outside-network optimization is bit-exact upstream and promising, but not yet validated in CONTROL."
+      },
+      {
+        "commit": "64d9cfdec0ff9507aba37491a6dae43df808a5a4",
+        "reason": "Oct-2 RTZ1080 installed upstream for Stellar/Onimusha; not promoted into CONTROL before a Control A/B visual/perf pass."
       }
     ]
   },

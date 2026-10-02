@@ -53,7 +53,7 @@ jobs:
           Assert-GitCommit "daniel-public-0.5.1" $pins.daniel_runtime.repository $pins.daniel_runtime.release_commit
           Assert-GitCommit "mochizuki-0.0.3" $pins.mochizuki_dlssnr_amd.repository $pins.mochizuki_dlssnr_amd.source_commit
           Assert-GitCommit "theautomatic-1.9.9.1" $pins.theautomatic.repository $pins.theautomatic.source_commit
-          Assert-GitCommit "amdnr-0.3.5-release" $pins.amdnr.repository $pins.amdnr.core_release_commit
+          Assert-GitCommit "amdnr-0.3.5.1-release" $pins.amdnr.repository $pins.amdnr.core_release_commit
           Assert-GitCommit "amdnr-latest-seen" $pins.amdnr.repository $pins.amdnr.latest_repo_commit_seen
 
           Write-Host "Quality gate: lmxxf lossy fast tier, 1088-row mode and adaptive reuse remain off; Daniel Reference is the quality baseline; open lmxxf PR #12 remains tracked-only."

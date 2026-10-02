@@ -76,7 +76,7 @@ if lmxxf["source_commit"] not in lmxxf["accepted_post_0_38_bit_exact_commits"]:
     raise RuntimeError("lmxxf source_commit must be one of the explicitly accepted post-0.38 bit-exact commits")
 if lmxxf["source_commit"] != "0edf4bd86e55598e986ef533ba78a22120779bb6":
     raise RuntimeError("lmxxf quality-safe production pin must be the validated 0edf4bd install state")
-if lmxxf["latest_repo_commit_seen"] != "fe4d1d734aa6e5aaa1e940229f11803bfe7e190f":
+if lmxxf["latest_repo_commit_seen"] != "64d9cfdec0ff9507aba37491a6dae43df808a5a4":
     raise RuntimeError("lmxxf latest-seen pin is stale")
 if lmxxf["stable_effect"]["lossy_1088_rows"] != "off by default":
     raise RuntimeError("Lossy 1088-row mode must remain off by default")
@@ -94,14 +94,18 @@ if not theautomatic.get("daniel_0_5_1_layout_supported"):
     raise RuntimeError("TheAutomatic reference must record Daniel 0.5.1 layout support")
 
 amdnr = PINS["amdnr"]
-if amdnr["core_release"] != "0.3.5" or amdnr.get("core_release_tag") != "Alpha0.3.5":
-    raise RuntimeError("AMDNR core baseline must be the public 0.3.5 release")
+if amdnr["core_release"] != "0.3.5.1" or amdnr.get("core_release_tag") != "Alpha0.3.5.1":
+    raise RuntimeError("AMDNR core baseline must be the public 0.3.5.1 release")
 if not amdnr.get("future_core_0_3_5_public"):
-    raise RuntimeError("AMDNR 0.3.5 must be recorded as public")
+    raise RuntimeError("AMDNR 0.3.5.x release lineage must be recorded as public")
 if not amdnr.get("core_release_commit") or not amdnr.get("latest_repo_commit_seen"):
     raise RuntimeError("AMDNR release and latest-seen commits must both be pinned")
 if not amdnr.get("full_source_public") or amdnr.get("full_source_snapshot_commit") != "a1818e87891cee0fe15fc4e6e3495746edcbf515":
     raise RuntimeError("AMDNR full-source snapshot pin is stale or missing")
+if amdnr.get("launcher_version") != "0.3.5.4":
+    raise RuntimeError("AMDNR launcher baseline must be 0.3.5.4")
+if amdnr.get("bundled_lmxxf") != "0.39":
+    raise RuntimeError("AMDNR 0.3.5.1 must record bundled lmxxf 0.39")
 if amdnr.get("daniel_runtime_supported") != "0.5.1":
     raise RuntimeError("AMDNR compatibility record must recognize public Daniel 0.5.1")
 
